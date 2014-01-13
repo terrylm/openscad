@@ -14,6 +14,10 @@ class Preferences : public QMainWindow, public Ui::Preferences
 	Q_OBJECT;
 
 public:
+        static const int SYNTAX_HIGHLIGHT_OFF = 0;
+        static const int SYNTAX_HIGHLIGHT_LIGHT_BG = 1;
+        static const int SYNTAX_HIGHLIGHT_DARK_BG = 2;
+        
 	~Preferences();
 	static Preferences *inst() { if (!instance) instance = new Preferences(); return instance; }
 
@@ -42,7 +46,7 @@ signals:
 	void requestRedraw() const;
 	void fontChanged(const QString &family, uint size) const;
 	void openCSGSettingsChanged() const;
-	void syntaxHighlightChanged(const QString &s);
+	void syntaxHighlightChanged(const int idx);
 
 private:
 	Preferences(QWidget *parent = NULL);

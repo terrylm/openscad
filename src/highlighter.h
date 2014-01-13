@@ -15,7 +15,7 @@ public:
 	void highlightBlock(const QString &text);
 	void highlightError(int error_pos);
 	void unhighlightLastError();
-	void assignFormatsToTokens(const QString &);
+	void assignFormatsToTokens(const int idx);
 private:
 	QTextBlock lastErrorBlock;
 	int errorPos;

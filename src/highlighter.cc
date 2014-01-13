@@ -173,12 +173,12 @@ void format_colors_for_dark_background(QMap<QString,QTextCharFormat> &formats)
 	formats["_$number"].setForeground(Qt::red);
 }
 
-void Highlighter::assignFormatsToTokens(const QString &s)
+void Highlighter::assignFormatsToTokens(const int idx)
 {
 	//PRINTB("assign fmts %s",s.toStdString());
-	if (s=="For Light Background") {
+	if (idx == Preferences::SYNTAX_HIGHLIGHT_LIGHT_BG) {
 		format_colors_for_light_background(this->typeformats);
-	} else if (s=="For Dark Background") {
+	} else if (idx == Preferences::SYNTAX_HIGHLIGHT_DARK_BG) {
 		format_colors_for_dark_background(this->typeformats);
 	} else return;
 
@@ -221,8 +221,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 	tokentypes["_$quote"] << "_$quote";
 	tokentypes["_$number"] << "_$number";
 
-	QString syntaxhighlight = Preferences::inst()->getValue("editor/syntaxhighlight").toString();
-	this->assignFormatsToTokens(syntaxhighlight);
+	int idx = Preferences::inst()->getValue("editor/syntaxhighlight").toInt();
+	this->assignFormatsToTokens(idx);
 
 	errorFormat.setBackground(Qt::red);
 	errorState = false;
@@ -293,7 +293,7 @@ void Highlighter::highlightBlock(const QString &text)
 	//  << ", text:'" << text.toStdString() << "'\n";
 
 	// If desired, skip all highlighting .. except for error highlighting.
-	if (Preferences::inst()->getValue("editor/syntaxhighlight").toString()==QString("Off")) {
+	if (Preferences::inst()->getValue("editor/syntaxhighlight").toInt() == Preferences::SYNTAX_HIGHLIGHT_OFF) {
 		if (errorState)
 			setFormat( errorPos - block_first_pos, 1, errorFormat);
 		return;

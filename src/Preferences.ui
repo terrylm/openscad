@@ -27,7 +27,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page3DView">
        <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -200,6 +200,14 @@
           </item>
           <item>
            <widget class="QComboBox" name="syntaxHighlight">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Off</string>
+             </property>
+            </item>
             <item>
              <property name="text">
               <string>For Light Background</string>
@@ -208,11 +216,6 @@
             <item>
              <property name="text">
               <string>For Dark Background</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Off</string>
              </property>
             </item>
            </widget>
