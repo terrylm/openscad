@@ -14,9 +14,17 @@ class Preferences : public QMainWindow, public Ui::Preferences
 	Q_OBJECT;
 
 public:
-        static const int SYNTAX_HIGHLIGHT_OFF = 0;
-        static const int SYNTAX_HIGHLIGHT_LIGHT_BG = 1;
-        static const int SYNTAX_HIGHLIGHT_DARK_BG = 2;
+        // The values for the SYNTAX_HIGHLIGHT_* constants must match
+        // the index of the entries in the preferences combobox.
+        static const int SYNTAX_HIGHLIGHT_OFF;
+        static const int SYNTAX_HIGHLIGHT_LIGHT_BG;
+        static const int SYNTAX_HIGHLIGHT_DARK_BG;
+        
+        // The values for the COLOR_SCHEME_* constants must match
+        // the index of the entries in the preferences listbox.
+        static const int COLOR_SCHEME_CORNFIELD;
+        static const int COLOR_SCHEME_METALLIC;
+        static const int COLOR_SCHEME_SUNSET;
         
 	~Preferences();
 	static Preferences *inst() { if (!instance) instance = new Preferences(); return instance; }
@@ -57,7 +65,7 @@ private:
 	void addPrefPage(QActionGroup *group, QAction *action, QWidget *widget);
 
 	QSettings::SettingsMap defaultmap;
-	QHash<QString, std::map<RenderSettings::RenderColor, Color4f> > colorschemes;
+	QHash<int, std::map<RenderSettings::RenderColor, Color4f> > colorschemes;
 	QHash<const QAction *, QWidget *> prefPages;
 
 	static Preferences *instance;
