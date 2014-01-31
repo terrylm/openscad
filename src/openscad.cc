@@ -470,6 +470,7 @@ int cmdline(const char *deps_output_file, const std::string &filename, Camera &c
 #include <QDir>
 #include <QFileInfo>
 #include <QMetaType>
+#include <QTextCodec>
 
 Q_DECLARE_METATYPE(shared_ptr<const Geometry>);
 
@@ -520,6 +521,8 @@ int gui(vector<string> &inputFiles, const fs::path &original_path, int argc, cha
 	// Other global settings
 	qRegisterMetaType<shared_ptr<const Geometry> >();
 	
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
 	const QString &app_path = app.applicationDirPath();
 	parser_init(app_path.toLocal8Bit().constData());
 
