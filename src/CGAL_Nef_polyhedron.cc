@@ -71,7 +71,7 @@ PolySet *CGAL_Nef_polyhedron::convertToPolyset() const
 	}
 	if (!err) err = createPolySetFromPolyhedron(P, *ps);
 	if (err) {
-		PRINT("ERROR: CGAL NefPolyhedron->Polyhedron conversion failed.");
+		PRINT(_("ERROR: CGAL NefPolyhedron->Polyhedron conversion failed."));
 		if (errmsg!="") PRINTB("ERROR: %s",errmsg);
 		delete ps; ps = NULL;
 	}

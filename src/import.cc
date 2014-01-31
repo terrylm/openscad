@@ -198,7 +198,7 @@ Geometry *ImportNode::createGeometry() const
 		// Open file and position at the end
 		std::ifstream f(this->filename.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
 		if (!f.good()) {
-			PRINTB("WARNING: Can't open import file '%s'.", this->filename);
+			PRINTB(_("WARNING: Can't open import file '%s'."), this->filename);
 			return g;
 		}
 
@@ -248,7 +248,7 @@ Geometry *ImportNode::createGeometry() const
 						}
 					}
 					catch (const boost::bad_lexical_cast &blc) {
-						PRINTB("WARNING: Can't parse vertex line '%s'.", line);
+						PRINTB(_("WARNING: Can't parse vertex line '%s'."), line);
 						i = 10;
 						continue;
 					}
@@ -292,7 +292,7 @@ Geometry *ImportNode::createGeometry() const
 			bool err = createPolySetFromPolyhedron(poly, *p);
 		}
 #else
-  PRINT("WARNING: OFF import requires CGAL.");
+  PRINT(_("WARNING: OFF import requires CGAL."));
 #endif
 	}
 		break;
@@ -302,7 +302,7 @@ Geometry *ImportNode::createGeometry() const
 	}
 		break;
 	default:
-		PRINTB("ERROR: Unsupported file format while trying to import file '%s'", this->filename);
+		PRINTB(_("ERROR: Unsupported file format while trying to import file '%s'"), this->filename);
 		g = new PolySet(0);
 	}
 

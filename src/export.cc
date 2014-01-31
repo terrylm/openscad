@@ -177,14 +177,14 @@ static void export_stl(const CGAL_Polyhedron &P, std::ostream &output)
 void export_stl(const CGAL_Nef_polyhedron *root_N, std::ostream &output)
 {
 	if (!root_N->p3->is_simple()) {
-		PRINT("Object isn't a valid 2-manifold! Modify your design.\n");
+		PRINT(_("Object isn't a valid 2-manifold! Modify your design.\n"));
 	}
 
 	bool usePolySet = false;
 	if (usePolySet) {
 		PolySet ps(3);
 		bool err = createPolySetFromNefPolyhedron3(*(root_N->p3), ps);
-		if (err) { PRINT("ERROR: Nef->PolySet failed"); }
+		if (err) { PRINT(_("ERROR: Nef->PolySet failed")); }
 		else {
 			export_stl(ps, output);
 		}
@@ -231,7 +231,7 @@ void export_off(const CGAL_Nef_polyhedron *root_N, std::ostream &output)
 		output << P;
 	}
 	catch (const CGAL::Assertion_exception &e) {
-		PRINTB("CGAL error in CGAL_Nef_polyhedron3::convert_to_Polyhedron(): %s", e.what());
+		PRINTB(_("CGAL error in CGAL_Nef_polyhedron3::convert_to_Polyhedron(): %s"), e.what());
 	}
 	CGAL::set_error_behaviour(old_behaviour);
 }

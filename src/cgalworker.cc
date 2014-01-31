@@ -33,7 +33,7 @@ void CGALWorker::work()
 		root_geom = evaluator.evaluateGeometry(*this->tree->root(), true);
 	}
 	catch (const ProgressCancelException &e) {
-		PRINT("Rendering cancelled.");
+		PRINT(_("Rendering cancelled."));
 	}
 
 	emit done(root_geom);

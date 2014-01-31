@@ -184,11 +184,11 @@ AbstractNode *PrimitiveModule::instantiate(const Context *ctx, const ModuleInsta
 	node->fa = c.lookup_variable("$fa").toDouble();
 
 	if (node->fs < F_MINIMUM) {
-		PRINTB("WARNING: $fs too small - clamping to %f", F_MINIMUM);
+		PRINTB(_("WARNING: $fs too small - clamping to %f"), F_MINIMUM);
 		node->fs = F_MINIMUM;
 	}
 	if (node->fa < F_MINIMUM) {
-		PRINTB("WARNING: $fa too small - clamping to %f", F_MINIMUM);
+		PRINTB(_("WARNING: $fa too small - clamping to %f"), F_MINIMUM);
 		node->fa = F_MINIMUM;
 	}
 
@@ -572,7 +572,7 @@ Geometry *PrimitiveNode::createGeometry() const
 				const Value &val = vec[i];
 				if (!val.getVec2(x, y) ||
 						isinf(x) || isinf(y)) {
-					PRINTB("ERROR: Unable to convert point %s at index %d to a vec2 of numbers", 
+					PRINTB(_("ERROR: Unable to convert point %s at index %d to a vec2 of numbers"), 
 								 val.toString() % i);
 					delete p;
 					return NULL;

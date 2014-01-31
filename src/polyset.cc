@@ -24,6 +24,7 @@
  *
  */
 
+#include "printutils.h"
 #include "polyset.h"
 #include "linalg.h"
 #include "printutils.h"
@@ -59,23 +60,23 @@ PolySet::~PolySet()
 std::string PolySet::dump() const
 {
 	std::stringstream out;
-	out << "PolySet:"
-	  << "\n dimensions:" << this->dim
-	  << "\n convexity:" << this->convexity
-	  << "\n num polygons: " << polygons.size()
-			<< "\n num outlines: " << polygon.outlines().size()
-	  << "\n polygons data:";
+	out << _("PolySet:")
+	  << _("\n dimensions:") << this->dim
+	  << _("\n convexity:") << this->convexity
+	  << _("\n num polygons: ") << polygons.size()
+			<< _("\n num outlines: ") << polygon.outlines().size()
+	  << _("\n polygons data:");
 	for (size_t i = 0; i < polygons.size(); i++) {
-		out << "\n  polygon begin:";
+		out << _("\n  polygon begin:");
 		const Polygon *poly = &polygons[i];
 		for (size_t j = 0; j < poly->size(); j++) {
 			Vector3d v = poly->at(j);
-			out << "\n   vertex:" << v.transpose();
+			out << _("\n   vertex:") << v.transpose();
 		}
 	}
-	out << "\n outlines data:";
+	out << _("\n outlines data:");
 	out << polygon.dump();
-	out << "\nPolySet end";
+	out << _("\nPolySet end");
 	return out.str();
 }
 
