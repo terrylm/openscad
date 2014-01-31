@@ -73,7 +73,7 @@ GeometryEvaluator::ResultObject GeometryEvaluator::applyToChildren(const Abstrac
 		if (item.second) {
 			if (!dim) dim = item.second->getDimension();
 			else if (dim != item.second->getDimension()) {
-				PRINT("WARNING: Mixing 2D and 3D objects is not supported.");
+				PRINT(_("WARNING: Mixing 2D and 3D objects is not supported."));
 				break;
 			}
 		}
@@ -185,7 +185,7 @@ void GeometryEvaluator::applyResize3D(CGAL_Nef_polyhedron &N,
 	for (int i=0;i<N.getDimension();i++) {
 		if (newsize[i]) {
 			if (bbox_size[i] == NT3(0)) {
-				PRINT("WARNING: Resize in direction normal to flat object is not implemented");
+				PRINT(_("WARNING: Resize in direction normal to flat object is not implemented"));
 				return;
 			}
 			else {
@@ -249,7 +249,7 @@ std::vector<const class Polygon2d *> GeometryEvaluator::collectChildren2D(const 
 				children.push_back(polygons);
 			}
 			else {
-				PRINT("WARNING: Ignoring 3D child object for 2D operation");
+				PRINT(_("WARNING: Ignoring 3D child object for 2D operation"));
 			}
 		}
 	}
@@ -273,7 +273,7 @@ void GeometryEvaluator::smartCacheInsert(const AbstractNode &node,
 	else {
 		if (!GeometryCache::instance()->contains(key)) {
 			if (!GeometryCache::instance()->insert(key, geom)) {
-				PRINT("WARNING: GeometryEvaluator: Node didn't fit into cache");
+				PRINT(_("WARNING: GeometryEvaluator: Node didn't fit into cache"));
 			}
 		}
 	}
@@ -321,7 +321,7 @@ Geometry::ChildList GeometryEvaluator::collectChildren3D(const AbstractNode &nod
 				children.push_back(item);
 			}
 			else {
-				PRINT("WARNING: Ignoring 2D child object for 3D operation");
+				PRINT(_("WARNING: Ignoring 2D child object for 3D operation"));
 			}
 		}
 	}
@@ -362,7 +362,7 @@ Polygon2d *GeometryEvaluator::applyToChildren2D(const AbstractNode &node, OpenSC
 		clipType = ClipperLib::ctDifference;
 		break;
 	default:
-		PRINTB("Error: Unknown boolean operation %d", int(op));
+		PRINTB(_("Error: Unknown boolean operation %d"), int(op));
 		return NULL;
 		break;
 	}
@@ -514,7 +514,7 @@ Response GeometryEvaluator::visit(State &state, const TransformNode &node)
 		if (!isSmartCached(node)) {
 			if (matrix_contains_infinity(node.matrix) || matrix_contains_nan(node.matrix)) {
 				// due to the way parse/eval works we can't currently distinguish between NaN and Inf
-				PRINT("Warning: Transformation matrix contains Not-a-Number and/or Infinity - removing object.");
+				PRINT(_("Warning: Transformation matrix contains Not-a-Number and/or Infinity - removing object."));
 			}
 			else {
 				// First union all children
@@ -762,7 +762,7 @@ static Geometry *rotatePolygon(const RotateExtrudeNode &node, const Polygon2d &p
 			max_x = fmax(max_x, v[0]);
 
 			if ((max_x - min_x) > max_x && (max_x - min_x) > fabs(min_x)) {
-				PRINTB("ERROR: all points for rotate_extrude() must have the same X coordinate sign (range is %.2f -> %.2f)", min_x % max_x);
+				PRINTB(_("ERROR: all points for rotate_extrude() must have the same X coordinate sign (range is %.2f -> %.2f)"), min_x % max_x);
 				delete ps;
 				return NULL;
 			}

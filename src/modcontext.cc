@@ -190,7 +190,7 @@ Value FileContext::evaluate_function(const std::string &name, const EvalContext 
 			ctx.initializeModule(*usedmod);
 			// FIXME: Set document path
 #if 0 && DEBUG
-			PRINTB("New lib Context for %s func:", name);
+			PRINTB(_("New lib Context for %s func:"), name);
 			ctx.dump(NULL, NULL);
 #endif
 			return usedmod->scope.functions[name]->evaluate(&ctx, evalctx);
@@ -214,7 +214,7 @@ AbstractNode *FileContext::instantiate_module(const ModuleInstantiation &inst, c
 			ctx.initializeModule(*usedmod);
 			// FIXME: Set document path
 #if 0 && DEBUG
-			PRINT("New file Context:");
+			PRINT(_("New file Context:"));
 			ctx.dump(NULL, &inst);
 #endif
 			return usedmod->scope.modules[inst.name()]->instantiate(&ctx, &inst, evalctx);

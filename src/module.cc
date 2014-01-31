@@ -136,7 +136,7 @@ AbstractNode *ModuleInstantiation::evaluate(const Context *ctx) const
 	EvalContext c(ctx, this->arguments, &this->scope);
 
 #if 0 && DEBUG
-	PRINT("New eval ctx:");
+	PRINT(_("New eval ctx:"));
 	c.dump(NULL, this);
 #endif
 	AbstractNode *node = ctx->instantiate_module(*this, &c); // Passes c as evalctx

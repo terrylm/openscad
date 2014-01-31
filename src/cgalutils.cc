@@ -27,7 +27,7 @@ namespace CGALUtils {
 			const CGAL_Nef_polyhedron *N = dynamic_cast<const CGAL_Nef_polyhedron *>(chgeom.get());
 			if (N) {
 				if (!N->p3->is_simple()) {
-					PRINT("Hull() currently requires a valid 2-manifold. Please modify your design. See http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/STL_Import_and_Export");
+					PRINT(_("Hull() currently requires a valid 2-manifold. Please modify your design. See http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/STL_Import_and_Export"));
 				}
 				else {
 					bool err = true;
@@ -41,8 +41,8 @@ namespace CGALUtils {
 						errmsg = std::string(e.what());
 					}
 					if (err) {
-						PRINT("ERROR: CGAL NefPolyhedron->Polyhedron conversion failed.");
-						if (errmsg!="") PRINTB("ERROR: %s",errmsg);
+						PRINT(_("ERROR: CGAL NefPolyhedron->Polyhedron conversion failed."));
+						if (errmsg!="") PRINTB(_("ERROR: %s"),errmsg);
 					} else {
 						std::transform(P.vertices_begin(), P.vertices_end(), std::back_inserter(points), 
 													 boost::bind(static_cast<const CGAL_Polyhedron::Vertex::Point_3&(CGAL_Polyhedron::Vertex::*)() const>(&CGAL_Polyhedron::Vertex::point), _1));
@@ -104,13 +104,13 @@ namespace CGALUtils {
 				target.minkowski(src);
 				break;
 			default:
-				PRINTB("ERROR: Unsupported CGAL operator: %d", op);
+				PRINTB(_("ERROR: Unsupported CGAL operator: %d"), op);
 			}
 		}
 		catch (const CGAL::Failure_exception &e) {
 			// union && difference assert triggered by testdata/scad/bugs/rotate-diff-nonmanifold-crash.scad and testdata/scad/bugs/issue204.scad
 			std::string opstr = op == OPENSCAD_UNION ? "union" : op == OPENSCAD_INTERSECTION ? "intersection" : op == OPENSCAD_DIFFERENCE ? "difference" : op == OPENSCAD_MINKOWSKI ? "minkowski" : "UNKNOWN";
-			PRINTB("CGAL error in CGALUtils::applyBinaryOperator %s: %s", opstr % e.what());
+			PRINTB(_("CGAL error in CGALUtils::applyBinaryOperator %s: %s"), opstr % e.what());
 
 			// Errors can result in corrupt polyhedrons, so put back the old one
 			target = src;
@@ -156,9 +156,9 @@ namespace CGALUtils {
 				newN.p3.reset(new CGAL_Nef_polyhedron3(N.p3->intersection(xy_plane, CGAL_Nef_polyhedron3::PLANE_ONLY)));
 			}
 			catch (const CGAL::Failure_exception &e) {
-				PRINTB("CGALUtils::project during plane intersection: %s", e.what());
+				PRINTB(_("CGALUtils::project during plane intersection: %s"), e.what());
 				try {
-					PRINT("Trying alternative intersection using very large thin box: ");
+					PRINT(_("Trying alternative intersection using very large thin box: "));
 					std::vector<CGAL_Point_3> pts;
 					// dont use z of 0. there are bugs in CGAL.
 					double inf = 1e8;
@@ -173,13 +173,13 @@ namespace CGALUtils {
 					newN.p3.reset(new CGAL_Nef_polyhedron3(nef_bigbox.intersection(*N.p3)));
 				}
 				catch (const CGAL::Failure_exception &e) {
-					PRINTB("CGAL error in CGALUtils::project during bigbox intersection: %s", e.what());
+					PRINTB(_("CGAL error in CGALUtils::project during bigbox intersection: %s"), e.what());
 				}
 			}
 				
 			if (!newN.p3 || newN.p3->is_empty()) {
 				CGAL::set_error_behaviour(old_behaviour);
-				PRINT("WARNING: projection() failed.");
+				PRINT(_("WARNING: projection() failed."));
 				return poly;
 			}
 				
@@ -201,7 +201,7 @@ namespace CGALUtils {
 				}
 				poly = convertToPolygon2d(*zremover.output_nefpoly2d);
 			}	catch (const CGAL::Failure_exception &e) {
-				PRINTB("CGAL error in CGALUtils::project while flattening: %s", e.what());
+				PRINTB(_("CGAL error in CGALUtils::project while flattening: %s"), e.what());
 			}
 			log << "</svg>\n";
 				
@@ -493,7 +493,7 @@ bool deproject( CGAL_Point_2 &p2, projection_t &projection, CGAL_Plane_3 &plane,
 		p3 = *point_test;
 		return false;
 	}
-	PRINT("ERROR: deproject failure");
+	PRINT(_("ERROR: deproject failure"));
 	return true;
 }
 
@@ -579,7 +579,7 @@ projection_t find_good_projection( CGAL_Plane_3 &plane )
 	} else if (min==qxz) {
 		goodproj.plane = XZPLANE;
 		if (sign(plane.b())<0) goodproj.flip = true;
-	} else PRINT("ERROR: failed to find projection");
+	} else PRINT(_("ERROR: failed to find projection"));
 	return goodproj;
 }
 
@@ -590,7 +590,7 @@ holding the polygon and it's holes. */
 bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::vector<CGAL_Polygon_3> &triangles, CGAL_Plane_3 &plane )
 {
 	if (polygons.size()==1 && polygons[0].size()==3) {
-		PRINT("input polygon has 3 points. shortcut tessellation.");
+		PRINT(_("input polygon has 3 points. shortcut tessellation."));
 		CGAL_Polygon_3 t;
 		t.push_back(polygons[0][2]);
 		t.push_back(polygons[0][1]);
@@ -602,12 +602,12 @@ bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::
 	CDT cdt;
 	std::map<CDTPoint,CGAL_Point_3> vertmap;
 
-	PRINT("finding good projection");
+	PRINT(_("finding good projection"));
 	projection_t goodproj = find_good_projection( plane );
 
-	PRINTB("plane %s",plane );
-	PRINTB("proj: %i %i",goodproj.plane % goodproj.flip);
-	PRINT("Inserting points and edges into Constrained Delaunay Triangulation");
+	PRINTB(_("plane %s"),plane );
+	PRINTB(_("proj: %i %i"),goodproj.plane % goodproj.flip);
+	PRINT(_("Inserting points and edges into Constrained Delaunay Triangulation"));
 	std::vector< std::vector<CGAL_Point_2> > polygons2d;
 	for (size_t i=0;i<polygons.size();i++) {
 	        std::vector<Vertex_handle> vhandles;
@@ -629,14 +629,14 @@ bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::
 			try {
 				cdt.insert_constraint( vhandles[vindex1], vhandles[vindex2] );
 			} catch (const CGAL::Failure_exception &e) {
-				PRINTB("WARNING: Constraint insertion failure %s", e.what());
+				PRINTB(_("WARNING: Constraint insertion failure %s"), e.what());
 			}
 			CGAL::set_error_behaviour(old_behaviour);
 		}
 	}
 
 	size_t numholes = polygons2d.size()-1;
-	PRINTB("seeding %i holes",numholes);
+	PRINTB(_("seeding %i holes"),numholes);
 	std::list<CDTPoint> list_of_seeds;
 	for (size_t i=1;i<polygons2d.size();i++) {
 		std::vector<CGAL_Point_2> &pgon = polygons2d[i];
@@ -657,16 +657,16 @@ bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::
 		//PRINTB("seed %s",*li);
 		double x = CGAL::to_double( li->x() );
 		double y = CGAL::to_double( li->y() );
-		PRINTB("seed %f,%f",x%y);
+		PRINTB(_("seed %f,%f"),x%y);
 	}
-	PRINT("seeding done");
+	PRINT(_("seeding done"));
 
-	PRINT( "meshing" );
+	PRINT(_("meshing"));
 	CGAL::refine_Delaunay_mesh_2_without_edge_refinement( cdt,
 		list_of_seeds.begin(), list_of_seeds.end(),
 		DummyCriteria<CDT>() );
 
-	PRINT("meshing done");
+	PRINT(_("meshing done"));
 	// this fails because it calls is_simple and is_simple fails on many
 	// Nef Polyhedron faces
 	//CGAL::Orientation original_orientation =
@@ -687,7 +687,7 @@ bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::
 			else err = deproject( p2, goodproj, plane, cp2 );
 			if (vertmap.count(p3)) cp3 = vertmap[p3];
 			else err = deproject( p3, goodproj, plane, cp3 );
-			if (err) PRINT("WARNING: 2d->3d deprojection failure");
+			if (err) PRINT(_("WARNING: 2d->3d deprojection failure"));
 			pgon.push_back( cp1 );
 			pgon.push_back( cp2 );
 			pgon.push_back( cp3 );
@@ -695,7 +695,7 @@ bool tessellate_3d_face_with_holes( std::vector<CGAL_Polygon_3> &polygons, std::
                 }
         }
 
-	PRINTB("built %i triangles\n",triangles.size());
+	PRINTB(_("built %i triangles\n"),triangles.size());
 	return err;
 }
 /////// Tessellation end
@@ -738,7 +738,7 @@ bool createPolySetFromNefPolyhedron3(const CGAL_Nef_polyhedron3 &N, PolySet &ps)
 		bool err = tessellate_3d_face_with_holes( polygons, triangles, plane );
 		if (!err) for (size_t i=0;i<triangles.size();i++) {
 			if (triangles[i].size()!=3) {
-				PRINT("WARNING: triangle doesn't have 3 points. skipping");
+				PRINT(_("WARNING: triangle doesn't have 3 points. skipping"));
 				continue;
 			}
 			ps.append_poly();
@@ -1018,11 +1018,11 @@ static CGAL_Nef_polyhedron *createNefPolyhedronFromPolySet(const PolySet &ps)
 	catch (const CGAL::Assertion_exception &e) {
 		if (std::string(e.what()).find("Plane_constructor")!=std::string::npos) {
 			if (std::string(e.what()).find("has_on")!=std::string::npos) {
-				PRINT("PolySet has nonplanar faces. Attempting alternate construction");
+				PRINT(_("PolySet has nonplanar faces. Attempting alternate construction"));
 				plane_error=true;
 			}
 		} else {
-			PRINTB("CGAL error in CGAL_Nef_polyhedron3(): %s", e.what());
+			PRINTB(_("CGAL error in CGAL_Nef_polyhedron3(): %s"), e.what());
 		}
 	}
 	if (plane_error) try {
@@ -1033,7 +1033,7 @@ static CGAL_Nef_polyhedron *createNefPolyhedronFromPolySet(const PolySet &ps)
 			if (!err) N = new CGAL_Nef_polyhedron3(P);
 		}
 		catch (const CGAL::Assertion_exception &e) {
-			PRINTB("Alternate construction failed. CGAL error in CGAL_Nef_polyhedron3(): %s", e.what());
+			PRINTB(_("Alternate construction failed. CGAL error in CGAL_Nef_polyhedron3(): %s"), e.what());
 		}
 	CGAL::set_error_behaviour(old_behaviour);
 	return new CGAL_Nef_polyhedron(N);
