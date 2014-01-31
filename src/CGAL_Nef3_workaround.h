@@ -253,7 +253,7 @@ public:
 	  } else
 	    CGAL_error_msg( "wrong value");
 	 } catch (const CGAL::Failure_exception &e) { // added for OpenSCAD
-	  PRINTB("WARNING: CGAL NefPolyhedron Triangulation failed: %s", e.what()); // added for OpenSCAD
+	  PRINTB(_("WARNING: CGAL NefPolyhedron Triangulation failed: %s"), e.what()); // added for OpenSCAD
 	  this->error=true; //added for OpenSCAD
 	 } // added for OpenSCAD
 	} else {
