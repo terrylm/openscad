@@ -1,0 +1,4 @@
+ERROR: Recursion detected calling function 'f'
+ERROR: Function recursion caught while instantiating module 'echo'
+ERROR: Recursion detected calling function 'g'
+ERROR: Function recursion caught while instantiating module 'm'
