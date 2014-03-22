@@ -3,8 +3,18 @@
 
 #include <string>
 #include <vector>
+#include <exception>
+
 #include "value.h"
 #include "typedefs.h"
+
+class function_recursion_detected: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Function recursion detected";
+  }
+};
 
 class Expression
 {

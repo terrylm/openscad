@@ -139,8 +139,13 @@ AbstractNode *ModuleInstantiation::evaluate(const Context *ctx) const
 	PRINT("New eval ctx:");
 	c.dump(NULL, this);
 #endif
-	AbstractNode *node = ctx->instantiate_module(*this, &c); // Passes c as evalctx
-	return node;
+	try {
+		AbstractNode *node = ctx->instantiate_module(*this, &c); // Passes c as evalctx
+		return node;
+	} catch (function_recursion_detected) {
+		PRINTB("ERROR: Function recursion caught while instantiating module '%s'", name());
+		return NULL;
+	}
 }
 
 std::vector<AbstractNode*> ModuleInstantiation::instantiateChildren(const Context *evalctx) const

@@ -164,7 +164,7 @@ Value Expression::evaluate(const Context *context) const
 		FuncRecursionGuard g(*this);
 		if (g.recursion_detected()) { 
 			PRINTB("ERROR: Recursion detected calling function '%s'", this->call_funcname);
-			return Value();
+			throw function_recursion_detected();
 		}
 
 		EvalContext c(context, this->call_arguments);
