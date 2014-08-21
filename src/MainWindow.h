@@ -79,6 +79,7 @@ private slots:
         void updateUndockMode(bool undockMode);
 	void setFileName(const QString &filename);
 	void setFont(const QString &family, uint size);
+	void setColorScheme(const QString &cs);
 	void showProgress();
 	void openCSGSettingsChanged();
 
@@ -126,7 +127,6 @@ private slots:
 	void compileEnded();
 
 private slots:
-        void pasteText(const QString text);
 	void pasteViewportTranslation();
 	void pasteViewportRotation();
 	void hideEditor();

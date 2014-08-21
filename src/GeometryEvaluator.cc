@@ -60,6 +60,7 @@ shared_ptr<const Geometry> GeometryEvaluator::evaluateGeometry(const AbstractNod
 
 		if (!allownef) {
 			if (shared_ptr<const CGAL_Nef_polyhedron> N = dynamic_pointer_cast<const CGAL_Nef_polyhedron>(this->root)) {
+				
 				this->root.reset(N->convertToPolyset());
 				smartCacheInsert(node, this->root);
 			}
@@ -873,7 +874,7 @@ Response GeometryEvaluator::visit(State &state, const ProjectionNode &node)
 					if (chN) chPS.reset(chN->convertToPolyset());
 					if (chPS) ps2d = PolysetUtils::flatten(*chPS);
 					if (ps2d) {
-						CGAL_Nef_polyhedron *N2d = createNefPolyhedronFromGeometry(*ps2d);
+						CGAL_Nef_polyhedron *N2d = CGALUtils::createNefPolyhedronFromGeometry(*ps2d);
 						poly = N2d->convertToPolygon2d();
 					}
 #endif
@@ -915,7 +916,7 @@ Response GeometryEvaluator::visit(State &state, const ProjectionNode &node)
 				if (newgeom) {
 					shared_ptr<const CGAL_Nef_polyhedron> Nptr = dynamic_pointer_cast<const CGAL_Nef_polyhedron>(newgeom);
 					if (!Nptr) {
-						Nptr.reset(createNefPolyhedronFromGeometry(*newgeom));
+						Nptr.reset(CGALUtils::createNefPolyhedronFromGeometry(*newgeom));
 					}
 					if (!Nptr->isEmpty()) {
 						Polygon2d *poly = CGALUtils::project(*Nptr, node.cut_mode);
@@ -948,7 +949,17 @@ Response GeometryEvaluator::visit(State &state, const CgaladvNode &node)
 		if (!isSmartCached(node)) {
 			switch (node.type) {
 			case MINKOWSKI: {
-				geom = applyToChildren(node, OPENSCAD_MINKOWSKI).constptr();
+				ResultObject res = applyToChildren(node, OPENSCAD_MINKOWSKI);
+				geom = res.constptr();
+				// If we added convexity, we need to pass it on
+				if (geom && geom->getConvexity() != node.convexity) {
+					shared_ptr<Geometry> editablegeom;
+					// If we got a const object, make a copy
+					if (res.isConst()) editablegeom.reset(geom->copy());
+					else editablegeom = res.ptr();
+					geom = editablegeom;
+					editablegeom->setConvexity(node.convexity);
+				}
 				break;
 			}
 			case HULL: {
